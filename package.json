@@ -1,0 +1,22 @@
+{
+  "name": "contract-generator",
+  "version": "1.0.0",
+  "description": "Generates contracts based on values that you input",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Benjamin Wasilewski <benwasilewski@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.16.0",
+    "download-gist": "^0.4.0",
+    "ejs-html": "^5.1.5",
+    "fs": "0.0.1-security",
+    "inquirer": "^6.0.0",
+    "marked": "^0.4.0",
+    "markedejs": "^0.1.0",
+    "ora": "^3.0.0",
+    "request": "^2.87.0"
+  }
+}
