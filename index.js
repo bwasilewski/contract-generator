@@ -1,70 +1,76 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
-
-let inquirer = require('inquirer'),
+const inquirer = require('inquirer'),
     fs = require('fs'),
     request = require('request'),
     _ = require('underscore'),
     ora = require('ora'),
-    spinner = ora('Getting template from Github'),
-    showdown = require('showdown'),
-    template_name = "Contract Template.md",
-    questions = [
-        {
-            type: 'input',
-            name: 'date',
-            message: 'date',
-            default: new Date().toDateString()
-        },
-        {
-            type: 'input',
-            name: 'companyname',
-            message: 'Company Name:',
-            default: 'Benjamin Wasilewski'
-        },
-        {
-            type: 'input',
-            name: 'customername',
-            message: 'Customer Name:'
-        },
-        {
-            type: 'input',
-            name: 'customeraddress',
-            message: 'Customer Address:'
-        },
-        {
-            type: 'input',
-            name: 'total',
-            message: 'Total ($):',
-            validate (value) {
-                return isNumber(value)
-            }
-        },
-        {
-            type: 'list',
-            name: 'paymentterms',
-            message: 'Payment Terms:',
-            choices: [
-                'Due Upon Receipt',
-                'Net 15',
-                'Net 30'
-            ]
-        },
-        {
-            type: 'input',
-            name: 'overdueinterest',
-            message: 'Overdue Interest (%):',
-            validate (value) {
-                return isNumber(value)
-            },
-            default: 10
-        }
-    ],
-    template
+    showdown = require('showdown')
 
+const questions = [
+    // {
+    //     type: 'input',
+    //     name: 'date',
+    //     message: 'date',
+    //     default: new Date().toDateString()
+    // },
+    // {
+    //     type: 'input',
+    //     name: 'companyname',
+    //     message: 'Company Name:',
+    //     default: 'Benjamin Wasilewski'
+    // },
+    // {
+    //     type: 'input',
+    //     name: 'customername',
+    //     message: 'Customer Name:'
+    // },
+    // {
+    //     type: 'input',
+    //     name: 'customeraddress',
+    //     message: 'Customer Address:'
+    // },
+    // {
+    //     type: 'input',
+    //     name: 'total',
+    //     message: 'Total ($):',
+    //     validate (value) {
+    //         return isNumber(value)
+    //     }
+    // },
+    {
+        type: 'list',
+        name: 'paymentterms',
+        message: 'Payment Terms:',
+        choices: [
+            'Due Upon Receipt',
+            'Net 15',
+            'Net 30'
+        ]
+    },
+    // {
+    //     type: 'input',
+    //     name: 'overdueinterest',
+    //     message: 'Overdue Interest (%):',
+    //     validate (value) {
+    //         return isNumber(value)
+    //     },
+    //     default: 10
+    // }
+],
+    temp_answers = {
+        companyname: 'BTW',
+        customername: 'Farva Jafri',
+        customeraddress: '123 Happy Lane',
+        total: '550',
+        paymentterms: 'Lorem Ipsum',
+        overdueinterest: '10%',
+        date: new Date().toDateString()
+    }
+    spinner = ora('Getting template from Github'),
+    template_name = "Contract Template.md"
+
+let template
 
 
 initialize()
@@ -97,16 +103,22 @@ function beginPrompts (template) {
     inquirer.prompt(questions).then(answers => {
         let html = new showdown.Converter().makeHtml(template),
             htmltemplate = _.template(html)
-            
-        writeToTemp(htmltemplate(answers))
+
+        writeToTemp(htmltemplate(temp_answers))
     })
 }
 
 function writeToTemp(html) {
-    fs.writeFile('./.temp/output.html', html, error => {
-        if (error) {
-            return console.log(error)
-        }
+    let wrapper = ''
+
+    fs.readFile('./src/wrapper.html', 'utf-8', function (error, data) {
+        wrapper = data.replace('<div id="wrapper-inner"></div>', html)
+
+        fs.writeFile('./dist/output.html', wrapper, error => {
+            if (error) {
+                return console.log(error)
+            }
+            console.log('File saved successfully!');
+        })
     })
-    console.log('File saved successfully!')
 }

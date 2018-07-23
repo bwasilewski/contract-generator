@@ -9,9 +9,9 @@
   "author": "Benjamin Wasilewski <benwasilewski@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "bootstrap": "^4.1.2",
     "commander": "^2.16.0",
     "download-gist": "^0.4.0",
-    "ejs-html": "^5.1.5",
     "fs": "0.0.1-security",
     "inquirer": "^6.0.0",
     "marked": "^0.4.0",
