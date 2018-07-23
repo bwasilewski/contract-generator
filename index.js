@@ -7,10 +7,10 @@
 let inquirer = require('inquirer'),
     fs = require('fs'),
     request = require('request'),
-    markd = require('markedejs'),
-    ejs = require('ejs-html'),
+    _ = require('underscore'),
     ora = require('ora'),
     spinner = ora('Getting template from Github'),
+    showdown = require('showdown'),
     template_name = "Contract Template.md",
     questions = [
         {
@@ -21,18 +21,18 @@ let inquirer = require('inquirer'),
         },
         {
             type: 'input',
-            name: 'company_name',
+            name: 'companyname',
             message: 'Company Name:',
             default: 'Benjamin Wasilewski'
         },
         {
             type: 'input',
-            name: 'customer_name',
+            name: 'customername',
             message: 'Customer Name:'
         },
         {
             type: 'input',
-            name: 'customer_address',
+            name: 'customeraddress',
             message: 'Customer Address:'
         },
         {
@@ -45,7 +45,7 @@ let inquirer = require('inquirer'),
         },
         {
             type: 'list',
-            name: 'payment_terms',
+            name: 'paymentterms',
             message: 'Payment Terms:',
             choices: [
                 'Due Upon Receipt',
@@ -55,7 +55,7 @@ let inquirer = require('inquirer'),
         },
         {
             type: 'input',
-            name: 'overdue_interest',
+            name: 'overdueinterest',
             message: 'Overdue Interest (%):',
             validate (value) {
                 return isNumber(value)
@@ -95,13 +95,10 @@ function isNumber (value) {
 
 function beginPrompts (template) {
     inquirer.prompt(questions).then(answers => {
-        markd.render(template, answers, function (error, html) {
-            if (!error) {
-                writeToTemp(html)
-            } else {
-                console.log('Error: ', error)
-            }
-        })
+        let html = new showdown.Converter().makeHtml(template),
+            htmltemplate = _.template(html)
+            
+        writeToTemp(htmltemplate(answers))
     })
 }
 
