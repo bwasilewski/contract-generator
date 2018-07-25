@@ -8,36 +8,42 @@ const inquirer = require('inquirer'),
     showdown = require('showdown')
 
 const questions = [
-    // {
-    //     type: 'input',
-    //     name: 'date',
-    //     message: 'date',
-    //     default: new Date().toDateString()
-    // },
-    // {
-    //     type: 'input',
-    //     name: 'companyname',
-    //     message: 'Company Name:',
-    //     default: 'Benjamin Wasilewski'
-    // },
-    // {
-    //     type: 'input',
-    //     name: 'customername',
-    //     message: 'Customer Name:'
-    // },
-    // {
-    //     type: 'input',
-    //     name: 'customeraddress',
-    //     message: 'Customer Address:'
-    // },
-    // {
-    //     type: 'input',
-    //     name: 'total',
-    //     message: 'Total ($):',
-    //     validate (value) {
-    //         return isNumber(value)
-    //     }
-    // },
+    {
+        type: 'input',
+        name: 'date',
+        message: 'date',
+        default: new Date().toDateString()
+    },
+    {
+        type: 'input',
+        name: 'companyname',
+        message: 'Company Name:',
+        default: 'Benjamin Wasilewski'
+    },
+    {
+        type: 'input',
+        name: 'customername',
+        message: 'Customer Name:'
+    },
+    {
+        type: 'input',
+        name: 'customeraddress',
+        message: 'Customer Address:'
+    },
+    {
+        type: 'input',
+        name: 'workdescription',
+        message: 'Description of work:',
+        default: 'Design and develop a website'
+    },
+    {
+        type: 'input',
+        name: 'total',
+        message: 'Total ($):',
+        validate (value) {
+            return isNumber(value)
+        }
+    },
     {
         type: 'list',
         name: 'paymentterms',
@@ -48,29 +54,28 @@ const questions = [
             'Net 30'
         ]
     },
-    // {
-    //     type: 'input',
-    //     name: 'overdueinterest',
-    //     message: 'Overdue Interest (%):',
-    //     validate (value) {
-    //         return isNumber(value)
-    //     },
-    //     default: 10
-    // }
-],
-    temp_answers = {
-        companyname: 'BTW',
-        customername: 'Farva Jafri',
-        customeraddress: '123 Happy Lane',
-        total: '550',
-        paymentterms: 'Lorem Ipsum',
-        overdueinterest: '10%',
-        date: new Date().toDateString()
-    }
+    {
+        type: 'list',
+        name: 'paymentschedule',
+        message: 'Payment Schedule',
+        choices: [
+            '50% upon start of work / 50% upon completion of work',
+            'Weekly',
+            'Monthly',
+            'Per Invoice'
+        ]
+    },
+    {
+        type: 'input',
+        name: 'overdueinterest',
+        message: 'Overdue Interest (%):',
+        validate (value) {
+            return isNumber(value)
+        },
+        default: 10
+    }],
     spinner = ora('Getting template from Github'),
     template_name = "Contract Template.md"
-
-let template
 
 
 initialize()
@@ -104,11 +109,11 @@ function beginPrompts (template) {
         let html = new showdown.Converter().makeHtml(template),
             htmltemplate = _.template(html)
 
-        writeToTemp(htmltemplate(temp_answers))
+        writeToTemp(htmltemplate(answers), answers)
     })
 }
 
-function writeToTemp(html) {
+function writeToTemp(html, answers) {
     let wrapper = ''
 
     fs.readFile('./src/wrapper.html', 'utf-8', function (error, data) {
@@ -118,7 +123,14 @@ function writeToTemp(html) {
             if (error) {
                 return console.log(error)
             }
-            console.log('File saved successfully!');
+            console.log('** HTML file saved successfully **');
+        })
+
+        fs.writeFile('./dist/output.json', JSON.stringify(answers), error => {
+            if (error) {
+                return console.log(error)
+            }
+            console.log('** Data file saved successfully **')
         })
     })
 }
