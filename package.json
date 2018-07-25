@@ -8,6 +8,17 @@
   },
   "author": "Benjamin Wasilewski <benwasilewski@gmail.com>",
   "license": "MIT",
+  "keywords": [
+    "contract",
+    "contracts",
+    "agreement",
+    "generator",
+    "freelance"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bwasilewski/contract-generator.git"
+  },
   "dependencies": {
     "bootstrap": "^4.1.2",
     "commander": "^2.16.0",
