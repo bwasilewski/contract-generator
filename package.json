@@ -27,7 +27,7 @@
     "gulp": "^3.9.1",
     "gulp-sass": "^4.0.1",
     "inquirer": "^6.0.0",
-    "marked": "^0.4.0",
+    "marked": "^0.7.0",
     "ora": "^3.0.0",
     "request": "^2.87.0",
     "showdown": "^1.8.6",
