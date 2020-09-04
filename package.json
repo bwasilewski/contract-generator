@@ -30,7 +30,7 @@
     "marked": "^0.4.0",
     "ora": "^3.0.0",
     "request": "^2.87.0",
-    "showdown": "^1.8.6",
+    "showdown": "^1.9.1",
     "underscore": "^1.9.1"
   }
 }
