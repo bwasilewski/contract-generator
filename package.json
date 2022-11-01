@@ -24,7 +24,7 @@
     "commander": "^2.16.0",
     "download-gist": "^0.4.0",
     "fs": "0.0.1-security",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-sass": "^4.0.1",
     "inquirer": "^6.0.0",
     "marked": "^0.4.0",
